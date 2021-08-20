@@ -13,8 +13,6 @@ import java.util.Scanner;
 
 public class TwitifyAddPlaylist {
 
-    public static SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(TwitifyConfig.getTwitifyKey()).build();
-
     public static String id;
     public static String playlistCategory;
     public static String owner;
