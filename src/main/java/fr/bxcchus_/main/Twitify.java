@@ -8,16 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class Twitify {
     /**
      * All instantiations of objects and classes can be found here
      */
     public static final Logger LOGGER = LoggerFactory.getLogger(Twitify.class);
-    public static void main(String[] args) throws IOException, ParseException, SpotifyWebApiException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         LOGGER.info("Twitify loaded..");
 
-        TwitifyGrabberPlaylist.getPlaylist_Sync();
+        // TwitifyGrabberPlaylist.getPlaylist_Sync();
         TwitifyGrabberPlaylist.getPlaylist_Async();
 
     }
