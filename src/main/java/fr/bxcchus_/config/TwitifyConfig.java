@@ -1,7 +1,4 @@
 package fr.bxcchus_.config;
-
-import com.wrapper.spotify.SpotifyApi;
-
 public class TwitifyConfig {
     /**
      * The entire Twitify configuration can be found here
