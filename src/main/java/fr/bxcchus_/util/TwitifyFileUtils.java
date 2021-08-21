@@ -2,7 +2,7 @@ package fr.bxcchus_.util;
 
 import java.io.*;
 
-public class FileUtils {
+public class TwitifyFileUtils {
 
     public static void createFile(File file) {
         if (!file.exists()) {

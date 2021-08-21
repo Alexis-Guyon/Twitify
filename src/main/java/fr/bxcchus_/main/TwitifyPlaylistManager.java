@@ -2,10 +2,11 @@ package fr.bxcchus_.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import fr.bxcchus_.util.FileUtils;
+import fr.bxcchus_.util.TwitifyFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TwitifyPlaylistManager {
@@ -14,21 +15,21 @@ public class TwitifyPlaylistManager {
     private final Gson gson = new Gson();
 
     private List<TwitifyPlaylist> playlists = new ArrayList<>();
-    private final File file = new File("./playlist.txt");
+    private final File file = new File("./playlist.json");
 
     public TwitifyPlaylistManager() {
         instance = this;
-        FileUtils.createFile(file);
+        TwitifyFileUtils.createFile(file);
         this.loadPlaylists();
     }
 
     public void loadPlaylists() {
-        playlists = gson.fromJson(FileUtils.readFile(file), new TypeToken<List<TwitifyPlaylist>>(){}.getType());
-        if(playlists == null) playlists = new ArrayList<>();
+        playlists = gson.fromJson(TwitifyFileUtils.readFile(file), new TypeToken<List<TwitifyPlaylist>>(){}.getType());
+        if(playlists == null) playlists = new LinkedList<>();
     }
 
     public void savePlaylists() {
-        FileUtils.saveFile(file, gson.toJson(playlists));
+        TwitifyFileUtils.saveFile(file, gson.toJson(playlists));
     }
 
     public List<TwitifyPlaylist> getPlaylists() {

@@ -1,10 +1,8 @@
 package fr.bxcchus_.command;
 
-import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import fr.bxcchus_.main.TwitifyPlaylistManager;
 import fr.bxcchus_.main.TwitifyPlaylist;
-import fr.bxcchus_.config.TwitifyConfig;
 import fr.bxcchus_.main.Twitify;
 import org.apache.hc.core5.http.ParseException;
 
@@ -26,17 +24,17 @@ public class TwitifyAddPlaylist {
 
         Scanner scanner = new Scanner(System.in);
         Twitify.LOGGER.warn("Indiquez la catégorie de la playlist : ");
-        playlistCategory = scanner.next();
+        playlistCategory = scanner.nextLine();
 
         Twitify.LOGGER.warn("Entrez l'id de votre playlist : ");
-        id = scanner.next();
+        id = scanner.nextLine();
 
         TwitifyPlaylist playlist = new TwitifyPlaylist(playlistCategory, owner, id);
         TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
         manager.getPlaylists().add(playlist);
         manager.savePlaylists();
 
-        TwitifyGetPlaylist t = new TwitifyGetPlaylist();
-        t.getPlaylist();
+
+
     }
 }
