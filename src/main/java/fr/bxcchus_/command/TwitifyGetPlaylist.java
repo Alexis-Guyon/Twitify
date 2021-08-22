@@ -30,6 +30,7 @@ public class TwitifyGetPlaylist {
 
         SearchPlaylistsRequest search = spotifyApi.searchPlaylists(query).build();
         TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
+
         for (TwitifyPlaylist playlist : manager.getPlaylists()) {
             if(playlist.getCategory().equalsIgnoreCase(query)) {
                 GetPlaylistRequest request = spotifyApi.getPlaylist(playlist.getId()).build();
@@ -40,21 +41,32 @@ public class TwitifyGetPlaylist {
                         "\nLien du Spotify du créateur de la playlist : https://open.spotify.com/user/" + p.getOwner().getId());
             }
             else {
+                if(query.equals("") || query.startsWith(" ")) return;
                 searchPlayFromSpotify(query, search);
             }
         }
     }
 
-    private void searchPlayFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException {
-        final CompletableFuture<Paging<PlaylistSimplified>> paging = search.executeAsync();
-        final Paging<PlaylistSimplified> simplifiedPaging = paging.join();
-        Twitify.LOGGER.info("\n\nListe de playlist trouvé sur Spotify contenant le mot clef : \"" + query + "\"");
-        for(PlaylistSimplified p : simplifiedPaging.getItems()) {
-            Twitify.LOGGER.info("\n\n" +
-                    "\nNom de la playlist : " + p.getName() +
-                    "\nLien de la playlist : https://open.spotify.com/playlist/" + p.getId() +
-                    "\nCréateur de la playlist : " + p.getOwner().getDisplayName() +
-                    "\nLien du créateur de la playlist : https://open.spotify.com/user/" + p.getOwner().getId() + "\n");
-        }
+    private void searchPlayFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException, IOException, ParseException, SpotifyWebApiException {
+        Random random = new Random();
+
+        final Paging<PlaylistSimplified> playlistSimplifiedPaging = search.execute();
+
+        int c = playlistSimplifiedPaging.getItems().length;
+        if(c <= 0) return;
+        int nb = random.nextInt(c);
+
+        PlaylistSimplified[] items = playlistSimplifiedPaging.getItems();
+        PlaylistSimplified playlist = items[nb];
+
+
+        Twitify.LOGGER.info("\n\nListe de playlist trouvé sur Spotify contenant le mot clef : \"" + query + "\"\n\n");
+
+        Twitify.LOGGER.info("\n\n" +
+                "\nNom de la playlist : " + playlist.getName() +
+                "\nLien de la playlist : https://open.spotify.com/playlist/" + playlist.getId() +
+                "\nCréateur de la playlist : " + playlist.getOwner().getDisplayName() +
+                "\nLien du créateur de la playlist : https://open.spotify.com/user/" + playlist.getOwner().getId() + "\n");
     }
+
 }

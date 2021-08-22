@@ -17,28 +17,33 @@ public class Twitify {
     public static boolean run = true;
 
     public static void main(String[] args) throws IOException, ParseException, SpotifyWebApiException {
-        LOGGER.info("Twitify loaded..");
-        new TwitifyPlaylistManager();
-        // Scanner scanner = new Scanner(System.in);
-        // String s = scanner.nextLine();
-        TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
+        int i = 0;
+        while (true) {
+            LOGGER.info("Twitify loaded..");
+            new TwitifyPlaylistManager();
+            // Scanner scanner = new Scanner(System.in);
+            // String s = scanner.nextLine();
+            TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
 
 
-        TwitifyGetPlaylist twitifyGetPlaylist = new TwitifyGetPlaylist();
-        twitifyGetPlaylist.getPlaylist();
-
-
-        /**
-         if (s.contains("@Twitify_bot send playlist")) {
             TwitifyGetPlaylist twitifyGetPlaylist = new TwitifyGetPlaylist();
             twitifyGetPlaylist.getPlaylist();
+            i++;
+            System.out.println("Utilisation du bot : " + i + " fois.");
 
+
+            /**
+             if (s.contains("@Twitify_bot send playlist")) {
+             TwitifyGetPlaylist twitifyGetPlaylist = new TwitifyGetPlaylist();
+             twitifyGetPlaylist.getPlaylist();
+
+             }
+             if (s.equalsIgnoreCase("@Twitify_bot add playlist")) {
+             TwitifyAddPlaylist twitifyAddPlaylist = new TwitifyAddPlaylist();
+             LOGGER.info(s);
+             twitifyAddPlaylist.addPlaylist();
+             }
+             **/
         }
-        if (s.equalsIgnoreCase("@Twitify_bot add playlist")) {
-            TwitifyAddPlaylist twitifyAddPlaylist = new TwitifyAddPlaylist();
-            LOGGER.info(s);
-            twitifyAddPlaylist.addPlaylist();
-        }
-         **/
     }
 }

@@ -15,7 +15,6 @@ public class TwitifyAddPlaylist {
     public static String playlistCategory;
     public static String owner;
 
-
     public void addPlaylist() throws IOException, ParseException, SpotifyWebApiException {
         /**
          * Add your playlist to the bot
