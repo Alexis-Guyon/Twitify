@@ -16,38 +16,41 @@ import org.apache.hc.core5.http.ParseException;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 
 public class TwitifyGetPlaylist {
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(TwitifyConfig.getTwitifyKey()).build();
 
-    public void getPlaylist() throws IOException, ParseException, SpotifyWebApiException {
+    public void getPlaylistFromFile() throws IOException, ParseException, SpotifyWebApiException {
+        Random random = new Random();
         Twitify.LOGGER.info("Quel type de playlist voulez-vous : ");
         Scanner scanner = new Scanner(System.in);
         String query = scanner.nextLine();
 
         SearchPlaylistsRequest search = spotifyApi.searchPlaylists(query).build();
         TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
+        int nb = random.nextInt(manager.getPlaylists().size());
+        TwitifyPlaylist[] twitifyPlaylists = manager.getPlaylists().toArray(new TwitifyPlaylist[0]);
+        TwitifyPlaylist playlist = twitifyPlaylists[nb];
+        if (manager.getPlaylists().size() <= 0) return;
 
-        for (TwitifyPlaylist playlist : manager.getPlaylists()) {
-            if(playlist.getCategory().equalsIgnoreCase(query)) {
-                GetPlaylistRequest request = spotifyApi.getPlaylist(playlist.getId()).build();
-                Playlist p = request.execute();
-                Twitify.LOGGER.info("\n\nCatégorie : " + playlist.getCategory() +
-                        "\nLien de la playlist : https://open.spotify.com/playlist/" + playlist.getId() +
-                        "\nCréateur de la playlist : " + p.getOwner().getDisplayName() +
-                        "\nLien du Spotify du créateur de la playlist : https://open.spotify.com/user/" + p.getOwner().getId());
-            }
-            else {
-                if(query.equals("") || query.startsWith(" ")) return;
-                searchPlayFromSpotify(query, search);
-            }
+        if (playlist.getCategory().equalsIgnoreCase(query)) {
+            GetPlaylistRequest request = spotifyApi.getPlaylist(playlist.getId()).build();
+            Playlist p = request.execute();
+            Twitify.LOGGER.info("\n\nCatégorie : " + playlist.getCategory() +
+                    "\nLien de la playlist : https://open.spotify.com/playlist/" + playlist.getId() +
+                    "\nCréateur de la playlist : " + p.getOwner().getDisplayName() +
+                    "\nLien du Spotify du créateur de la playlist : https://open.spotify.com/user/" + p.getOwner().getId());
+        } else {
+            if (query.equals("") || query.startsWith(" ")) return;
+            Twitify.LOGGER.warn("\nAucune playlist Spotify trouvé ayant pour mot clef : \"" + query + "\"");
+            Twitify.LOGGER.info("\nRecherche d'une playlist publique sur Spotify ayant pour mot clef : \"" + query + "\"");
+            searchPlaylistFromSpotify(query, search);
         }
     }
 
-    private void searchPlayFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException, IOException, ParseException, SpotifyWebApiException {
+    private void searchPlaylistFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException, IOException, ParseException, SpotifyWebApiException {
         Random random = new Random();
 
         final Paging<PlaylistSimplified> playlistSimplifiedPaging = search.execute();
@@ -60,9 +63,8 @@ public class TwitifyGetPlaylist {
         PlaylistSimplified playlist = items[nb];
 
 
-        Twitify.LOGGER.info("\n\nListe de playlist trouvé sur Spotify contenant le mot clef : \"" + query + "\"\n\n");
-
-        Twitify.LOGGER.info("\n\n" +
+        Twitify.LOGGER.info("\n\nPlaylist généré aléatoirement ayant comme mot clef : \"" + query + "\"\n\n");
+        Twitify.LOGGER.info("\n" +
                 "\nNom de la playlist : " + playlist.getName() +
                 "\nLien de la playlist : https://open.spotify.com/playlist/" + playlist.getId() +
                 "\nCréateur de la playlist : " + playlist.getOwner().getDisplayName() +

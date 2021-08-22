@@ -22,12 +22,13 @@ public class TwitifyAddPlaylist {
          */
 
         Scanner scanner = new Scanner(System.in);
-        Twitify.LOGGER.warn("Indiquez la catégorie de la playlist : ");
+        Twitify.LOGGER.info("Indiquez la catégorie de la playlist : ");
         playlistCategory = scanner.nextLine();
 
-        Twitify.LOGGER.warn("Entrez l'id de votre playlist : ");
+        Twitify.LOGGER.info("Entrez l'id de votre playlist : ");
         id = scanner.nextLine();
-
+        Twitify.LOGGER.info("Votre playlist a été ajouté.\n     Merci de votre contribution.");
+        Twitify.LOGGER.info("Lien de la playlist : https://open.spotify.com/playlist/" + id);
         TwitifyPlaylist playlist = new TwitifyPlaylist(playlistCategory, owner, id);
         TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
         manager.getPlaylists().add(playlist);

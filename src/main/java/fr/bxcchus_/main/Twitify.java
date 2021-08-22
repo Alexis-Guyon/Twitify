@@ -18,18 +18,19 @@ public class Twitify {
 
     public static void main(String[] args) throws IOException, ParseException, SpotifyWebApiException {
         int i = 0;
+        LOGGER.info("Twitify loaded..");
         while (true) {
-            LOGGER.info("Twitify loaded..");
+            i++;
             new TwitifyPlaylistManager();
             // Scanner scanner = new Scanner(System.in);
             // String s = scanner.nextLine();
             TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
 
+            // TwitifyAddPlaylist twitifyAddPlaylist = new TwitifyAddPlaylist();
+            // twitifyAddPlaylist.addPlaylist();
 
             TwitifyGetPlaylist twitifyGetPlaylist = new TwitifyGetPlaylist();
-            twitifyGetPlaylist.getPlaylist();
-            i++;
-            System.out.println("Utilisation du bot : " + i + " fois.");
+            twitifyGetPlaylist.getPlaylistFromFile();
 
 
             /**
