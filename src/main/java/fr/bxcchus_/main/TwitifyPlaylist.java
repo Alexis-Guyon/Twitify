@@ -1,6 +1,5 @@
 package fr.bxcchus_.main;
 
-
 import com.wrapper.spotify.model_objects.specification.Playlist;
 
 public class TwitifyPlaylist {

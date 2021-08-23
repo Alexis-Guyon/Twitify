@@ -11,6 +11,7 @@ import fr.bxcchus_.main.TwitifyPlaylist;
 import fr.bxcchus_.main.TwitifyPlaylistManager;
 import fr.bxcchus_.config.TwitifyConfig;
 import fr.bxcchus_.main.Twitify;
+import fr.bxcchus_.util.Command;
 import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
@@ -19,10 +20,18 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionException;
 
 
-public class TwitifyGetPlaylist {
+public class TwitifyGetPlaylistCommand extends Command {
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(TwitifyConfig.getTwitifyKey()).build();
 
-    public void getPlaylistFromFile() throws IOException, ParseException, SpotifyWebApiException {
+    public TwitifyGetPlaylistCommand() {
+        super("TwitifyGetPlaylistCommand", "@Twitify_bot cherche", "Envoie une playlist aléatoire crée ou non par les utilisateurs en fonction de la catégorie recherché");
+    }
+
+    /**
+     * Find a playlist from playlist.json
+     */
+    @Override
+    public void execute() throws IOException, ParseException, SpotifyWebApiException{
         Random random = new Random();
         Twitify.LOGGER.info("Quel type de playlist voulez-vous : ");
         Scanner scanner = new Scanner(System.in);
@@ -30,10 +39,13 @@ public class TwitifyGetPlaylist {
 
         SearchPlaylistsRequest search = spotifyApi.searchPlaylists(query).build();
         TwitifyPlaylistManager manager = TwitifyPlaylistManager.getInstance();
+        if (manager.getPlaylists().isEmpty()){
+            searchPlaylistFromSpotify(query, search);
+        }
+        if (manager.getPlaylists().size() <= 0) return;
         int nb = random.nextInt(manager.getPlaylists().size());
         TwitifyPlaylist[] twitifyPlaylists = manager.getPlaylists().toArray(new TwitifyPlaylist[0]);
         TwitifyPlaylist playlist = twitifyPlaylists[nb];
-        if (manager.getPlaylists().size() <= 0) return;
 
         if (playlist.getCategory().equalsIgnoreCase(query)) {
             GetPlaylistRequest request = spotifyApi.getPlaylist(playlist.getId()).build();
@@ -50,7 +62,10 @@ public class TwitifyGetPlaylist {
         }
     }
 
-    private void searchPlaylistFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException, IOException, ParseException, SpotifyWebApiException {
+    /**
+     * Search a playlist from Spotify Browser
+     */
+    public void searchPlaylistFromSpotify(String query, SearchPlaylistsRequest search) throws CompletionException, CancellationException, IOException, ParseException, SpotifyWebApiException {
         Random random = new Random();
 
         final Paging<PlaylistSimplified> playlistSimplifiedPaging = search.execute();
@@ -70,5 +85,4 @@ public class TwitifyGetPlaylist {
                 "\nCréateur de la playlist : " + playlist.getOwner().getDisplayName() +
                 "\nLien du créateur de la playlist : https://open.spotify.com/user/" + playlist.getOwner().getId() + "\n");
     }
-
 }
