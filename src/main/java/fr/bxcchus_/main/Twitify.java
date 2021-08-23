@@ -53,7 +53,7 @@ public class Twitify {
             } else {
                 LOGGER.info("Essayer la commande \"@Twitify_bot help\" ou \"@Twitify_bot aide\"");
             }
-            if(command.equals(spotifyApi.getAccessToken() + "stop")){
+            if(command.equals(spotifyApi.getAccessToken() + getTwitterInstance().getOAuthAccessToken())){
                 run = false;
             }
         }
