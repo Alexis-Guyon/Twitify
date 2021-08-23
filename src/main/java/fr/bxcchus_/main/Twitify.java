@@ -41,7 +41,7 @@ public class Twitify {
         boolean run = true;
         LOGGER.info("Twitify loaded..");
         while (run) {
-
+            i++;
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
             if(command.equalsIgnoreCase("@Twitify_bot help") || command.equalsIgnoreCase("@Twitify_bot aide")) {
